@@ -1,5 +1,6 @@
 package com.example.scriboai.document.model;
 
+import com.example.scriboai.folder.model.Folder;
 import com.example.scriboai.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,11 +10,19 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "documents")
+@Table(
+        name = "documents",
+        indexes = {
+                @Index(name = "idx_docs_owner", columnList = "owner_id"),
+                @Index(name = "idx_docs_folder", columnList = "folder_id")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"owner", "folder"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 public class Document {
     @Id
@@ -24,7 +33,6 @@ public class Document {
     @Builder.Default
     private String title = "Untitled Document";
 
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -38,12 +46,25 @@ public class Document {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(
+            name = "owner_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_documents_owner")
+    )
+    @org.hibernate.annotations.OnDelete(
+            action = org.hibernate.annotations.OnDeleteAction.CASCADE
+    )
     private User owner;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "folder_id")
-//    private Folder folder;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "folder_id",
+        foreignKey = @ForeignKey(name = "fk_documents_folder")
+    )
+    @org.hibernate.annotations.OnDelete(
+        action = org.hibernate.annotations.OnDeleteAction.CASCADE
+    )
+    private Folder folder;
 
 
 }
