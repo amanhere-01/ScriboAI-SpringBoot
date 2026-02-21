@@ -1,7 +1,7 @@
 package com.example.scriboai.auth.dto;
 
 public record UserResponse(
-        Integer Id,
+        Long Id,
         String username,
         String email
 ) {
