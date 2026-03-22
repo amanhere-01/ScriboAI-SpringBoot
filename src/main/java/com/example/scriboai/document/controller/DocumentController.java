@@ -1,5 +1,6 @@
 package com.example.scriboai.document.controller;
 
+import com.example.scriboai.common.dto.PageResponse;
 import com.example.scriboai.document.dto.request.UpdateContentRequest;
 import com.example.scriboai.document.dto.request.UpdateTitleRequest;
 import com.example.scriboai.document.dto.response.DocumentResponse;
@@ -28,9 +29,19 @@ public class DocumentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DocumentResponse>> getAllDocs(Authentication authentication){
-        List<DocumentResponse> docs = documentService.getAllDocs(authentication.getName());
-        return ResponseEntity.ok(docs);
+    public ResponseEntity<PageResponse<DocumentResponse>> getAllDocs(
+            Authentication authentication,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int pageSize
+    ){
+
+        PageResponse<DocumentResponse> response = documentService.getAllDocs(
+                authentication.getName(),
+                page,
+                pageSize
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{docId}")

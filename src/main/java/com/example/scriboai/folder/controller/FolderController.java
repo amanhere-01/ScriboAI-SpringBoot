@@ -1,5 +1,6 @@
 package com.example.scriboai.folder.controller;
 
+import com.example.scriboai.common.dto.PageResponse;
 import com.example.scriboai.document.dto.response.DocumentResponse;
 import com.example.scriboai.folder.dto.FolderNameRequest;
 import com.example.scriboai.folder.dto.FolderResponse;
@@ -36,9 +37,13 @@ public class FolderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FolderResponse>> getAllFolders(Authentication authentication){
-        List<FolderResponse> folders = service.getAllFolders(authentication.getName());
-        return ResponseEntity.ok(folders);
+    public ResponseEntity<PageResponse<FolderResponse>> getAllFolders(
+            Authentication authentication,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int pageSize
+    ){
+        PageResponse<FolderResponse> response = service.getAllFolders(authentication.getName(), page, pageSize);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{folderId}")

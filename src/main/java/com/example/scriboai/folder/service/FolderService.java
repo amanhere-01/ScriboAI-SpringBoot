@@ -1,5 +1,6 @@
 package com.example.scriboai.folder.service;
 
+import com.example.scriboai.common.dto.PageResponse;
 import com.example.scriboai.common.exception.ResourceNotFoundException;
 import com.example.scriboai.document.dto.response.DocumentResponse;
 import com.example.scriboai.document.mapper.DocumentMapper;
@@ -14,6 +15,10 @@ import com.example.scriboai.user.model.User;
 import com.example.scriboai.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
@@ -62,14 +67,24 @@ public class FolderService {
         return DocumentMapper.toResponse(saved);
     }
 
-    public List<FolderResponse> getAllFolders(String email){
+    public PageResponse<FolderResponse> getAllFolders(String email, int page, int pageSize){
         User user = getUserByEmail(email);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").ascending());
 
-        return folderRepository
-                .findByOwner_IdOrderByNameAsc(user.getId())
+        Page<Folder>  folderPage = folderRepository.findByOwner_Id(user.getId(), pageable);
+        List<FolderResponse> content = folderPage
+                .getContent()
                 .stream()
                 .map(FolderMapper::toResponse)
                 .toList();
+
+        return new PageResponse<>(
+                content,
+                folderPage.getNumber(),
+                folderPage.getSize(),
+                folderPage.getTotalElements(),
+                folderPage.getTotalPages()
+        );
     }
 
     public FolderWithDocsResponse getFolderData(Long folderId, String email){

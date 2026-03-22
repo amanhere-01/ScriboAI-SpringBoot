@@ -52,17 +52,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFound(Exception ex) {
+    public ResponseEntity<?> handleResourceNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse("NOT_FOUND", "Resource not found"));
     }
 
     @ExceptionHandler(AiException.class)
-//    public ResponseEntity<?> handleAiError(Exception ex) {
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                .body(new ErrorResponse("NOT_FOUND", "Resource not found"));
-//    }
-
     public ResponseEntity<?> handleAiException(AiException ex) {
         return ResponseEntity
                 .badRequest()
