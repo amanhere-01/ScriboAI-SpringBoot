@@ -12,6 +12,12 @@ public class AiController {
 
     private final AiService aiService;
 
+    @PostMapping("/action")
+    public AiActionResponse actionResponse(@RequestBody AiActionRequest request){
+        String reply = aiService.processAction(request.action(), request.text());
+        return new AiActionResponse(reply);
+    }
+
     @PostMapping("/chat")
     public AiChatResponse chat(@RequestBody AiChatRequest request) {
 

@@ -23,7 +23,11 @@ public class GroqService {
         Map<String, Object> body = Map.of(
                 "model", "llama-3.1-8b-instant",
                 "messages", new Object[]{
-                        Map.of("role", "user", "content", prompt)
+                    Map.of(
+                        "role", "system",
+                        "content", "You are a writing assistant. Follow instructions strictly. Return ONLY the result without extra text."
+                    ),
+                    Map.of("role", "user", "content", prompt)
                 }
         );
 

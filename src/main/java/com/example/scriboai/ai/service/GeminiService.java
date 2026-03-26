@@ -20,13 +20,20 @@ public class GeminiService {
     public String ask(String prompt) {
 
         String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + geminiKey;
+        String finalPrompt = """
+            You are a writing assistant.
+            Follow instructions strictly.
+            Return ONLY the result without extra explanation.
+        
+            %s
+            """.formatted(prompt);
 
         Map<String, Object> body = Map.of(
-                "contents", new Object[]{
-                        Map.of("parts", new Object[]{
-                                Map.of("text", prompt)
-                        })
-                }
+            "contents", new Object[]{
+                Map.of("parts", new Object[]{
+                    Map.of("text", finalPrompt)
+                })
+            }
         );
 
         Map response = webClientBuilder.build()
