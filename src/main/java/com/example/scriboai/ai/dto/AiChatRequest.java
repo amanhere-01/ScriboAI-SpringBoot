@@ -1,6 +1,9 @@
 package com.example.scriboai.ai.dto;
 
+import java.util.List;
+
 public record AiChatRequest(
-        String message,
-        String provider
+        String provider,
+        String document,
+        List<Message> messages
 ) {}

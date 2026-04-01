@@ -21,11 +21,12 @@ public class AiController {
     @PostMapping("/chat")
     public AiChatResponse chat(@RequestBody AiChatRequest request) {
 
-        String reply = aiService.ask(
+        String reply = aiService.chat(
                 request.provider(),
-                request.message()
+                request.document(),
+                request.messages()
         );
-
+        System.out.println("REPLY____________________________" + reply);
         return new AiChatResponse(reply);
     }
 }
