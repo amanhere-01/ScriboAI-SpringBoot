@@ -1,6 +1,6 @@
 # ScriboAI Frontend
 
-ScriboAI is a React + Vite frontend for an AI-assisted writing workspace. It lets users sign in, create and organize documents in folders, edit content in a rich text editor, and use AI tools to rewrite, summarize, or continue writing.
+ScriboAI Frontend is a React + Vite client for the ScriboAI writing workspace. It handles authentication screens, dashboard navigation, folder and document browsing, rich text editing, and AI-assisted writing interactions.
 
 ## Features
 
@@ -26,6 +26,17 @@ ScriboAI is a React + Vite frontend for an AI-assisted writing workspace. It let
 - Tiptap editor
 - Lucide React icons
 - React Toastify
+
+## Responsibilities
+
+This frontend is responsible for:
+
+- routing between auth, dashboard, editor, folder, and profile pages
+- storing auth state in Redux
+- calling the backend with `credentials: "include"`
+- rendering the Tiptap-based editor
+- sending AI action and AI chat requests
+- displaying loading, success, and error states
 
 ## Getting Started
 
@@ -65,10 +76,12 @@ Open the app at the local Vite URL shown in the terminal, usually `http://localh
 
 ## Available Scripts
 
-- `npm run dev` - start the development server
-- `npm run build` - create a production build
-- `npm run preview` - preview the production build locally
-- `npm run lint` - run ESLint
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint |
 
 ## Main Routes
 
@@ -82,24 +95,27 @@ Open the app at the local Vite URL shown in the terminal, usually `http://localh
 ## Project Structure
 
 ```text
-src/
-  components/
-    AIPanel.jsx
-    CreateFolder.jsx
-    DeleteModal.jsx
-  pages/
-    Auth.jsx
-    AuthSuccess.jsx
-    DocumentEditor.jsx
-    FolderPage.jsx
-    Home.jsx
-    Profile.jsx
-  store/
-    authSlice.js
-    store.js
-  App.jsx
-  Routes.jsx
-  main.jsx
+frontend/
+|-- src/
+|   |-- components/
+|   |   |-- AIPanel.jsx
+|   |   |-- CreateFolder.jsx
+|   |   `-- DeleteModal.jsx
+|   |-- pages/
+|   |   |-- Auth.jsx
+|   |   |-- AuthSuccess.jsx
+|   |   |-- DocumentEditor.jsx
+|   |   |-- FolderPage.jsx
+|   |   |-- Home.jsx
+|   |   `-- Profile.jsx
+|   |-- store/
+|   |   |-- authSlice.js
+|   |   `-- store.js
+|   |-- App.jsx
+|   |-- Routes.jsx
+|   `-- main.jsx
+|-- package.json
+`-- README.md
 ```
 
 ## How It Works
@@ -123,30 +139,32 @@ src/
 - The side panel supports AI chat against the current document
 - The UI supports switching between `gemini` and `groq` providers
 
+## Backend Contract
+
+This frontend expects a backend that:
+
+- runs on the URL provided in `VITE_BACKEND_URL`
+- supports cookie-based auth
+- allows credentials in CORS
+- exposes the expected `/api` routes
+
+Main endpoint groups used by the frontend:
+
+- `/api/auth/*`
+- `/api/docs/*`
+- `/api/f/*`
+- `/api/ai/*`
+
 ## Deployment
 
 This project includes `vercel.json` with a rewrite rule so client-side routes resolve correctly when deployed on Vercel.
-
-## Backend Expectations
-
-This frontend expects a backend that provides endpoints similar to:
-
-- `/auth/register`
-- `/auth/login`
-- `/auth/logout` or `/auth/signout`
-- `/oauth2/authorization/google`
-- `/docs`
-- `/docs/:docId`
-- `/docs/:docId/title`
-- `/docs/count`
-- `/f`
-- `/f/:folderId`
-- `/f/:folderId/docs`
-- `/f/count`
-- `/ai/action`
-- `/ai/chat`
 
 ## Notes
 
 - `node_modules/` is already present in this workspace, but `npm install` is still the standard setup step on a fresh clone.
 - There is also an unused `src/pages/doc.jsx` file in the repository that is not currently wired into routing.
+
+## Related Docs
+
+- Project overview: [../README.md](../README.md)
+- Backend guide: [../backend/README.md](../backend/README.md)
