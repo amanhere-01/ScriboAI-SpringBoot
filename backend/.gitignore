@@ -34,8 +34,5 @@ build/
 
 ###My things###
 architecture.txt
-docker-compose.yml
 src/main/resources/application.properties
-README.md
 redme2.md
-API_REFERENCE.md
